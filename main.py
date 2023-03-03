@@ -1,6 +1,5 @@
 import os
 import nutrition
-import sheety
 
 my_weight = os.environ.get('WEIGHT')  # kilograms
 my_height = os.environ.get('HEIGHT')  # centimeters
