@@ -1,6 +1,7 @@
 import requests
 import datetime
 import os
+import sheety
 
 
 class Nutritionix:
@@ -13,16 +14,46 @@ class Nutritionix:
         self.age = my_age
         self.height = my_height
         self.weight = my_weight
+        self.exercise = ''
+        self.duration_min = ''
+        self.date_time = datetime.datetime.now()
+        self.calories = 0
+        self.workout_day = ''
+        self.workout_time = ''
+        self.get_sheety()
 
-    def get_exercise_info(self):
+    def post_exercise_info(self):
         end_point = f'{self.website}/v2/natural/exercise'
-        print(end_point)
         head = {'x-app-id': self.nutrition_id, 'x-app-key': self.nutrition_key, 'x-remote-user-id': self.dev_mode}
-        json_body = {"query": "ran 2 miles and walked for 3km",
+        json_body = {"query": "ran 5k and cycled for 20 minutes",
                      "gender": "female",
                      "weight_kg": 72.5,
                      "height_cm": 167.64,
                      "age": 30}
-        requestor = requests.post(url=end_point, headers=head,json=json_body)
+        requestor = requests.post(url=end_point, headers=head, json=json_body)
         requestor.raise_for_status()
-        print(requestor.text)
+        response = requestor.json()
+        # print(response)
+        for x in response['exercises']:
+            self.exercise = x['user_input']
+            self.duration_min = x['duration_min']
+            self.calories = x['nf_calories']
+            self.workout_day = self.date_time.strftime('%d/%m/%Y')
+            self.workout_time = self.date_time.strftime('%H:%M:%S')
+            print(f'exercises = {self.exercise}')
+            print(f'workout_date = {self.workout_day}')
+            print(f'workout_time = {self.workout_time}')
+
+    def get_sheety(self):
+        my_sheety = sheety.Sheety()
+        my_sheety.get_data()
+
+    def post_sheety(self, workout_day, workout_time, ):
+        payload = {'workouts': {'name': self.exercise, 'date': self.workout_day, 'time': self.workout_time,
+                                'duration': self.duration_min,
+                                'calories': self.calories}}
+        post_to_sheety = sheety.Sheety()
+        post_to_sheety.post_date(payload)
+
+
+        return
