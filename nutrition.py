@@ -40,20 +40,18 @@ class Nutritionix:
             self.calories = x['nf_calories']
             self.workout_day = self.date_time.strftime('%d/%m/%Y')
             self.workout_time = self.date_time.strftime('%H:%M:%S')
-            print(f'exercises = {self.exercise}')
-            print(f'workout_date = {self.workout_day}')
-            print(f'workout_time = {self.workout_time}')
+            # print(f'exercises = {self.exercise}')
+            # print(f'workout_date = {self.workout_day}')
+            # print(f'workout_time = {self.workout_time}')
+            self.post_sheety()
 
     def get_sheety(self):
         my_sheety = sheety.Sheety()
         my_sheety.get_data()
 
-    def post_sheety(self, workout_day, workout_time, ):
-        payload = {'workouts': {'name': self.exercise, 'date': self.workout_day, 'time': self.workout_time,
-                                'duration': self.duration_min,
-                                'calories': self.calories}}
+    def post_sheety(self):
+        payload = {'workout': {'exercise': self.exercise.title(), 'date': self.workout_day, 'time': self.workout_time,
+                               'duration': self.duration_min,
+                               'calories': self.calories}}
         post_to_sheety = sheety.Sheety()
         post_to_sheety.post_date(payload)
-
-
-        return
