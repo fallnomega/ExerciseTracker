@@ -33,16 +33,12 @@ class Nutritionix:
         requestor = requests.post(url=end_point, headers=head, json=json_body)
         requestor.raise_for_status()
         response = requestor.json()
-        # print(response)
         for x in response['exercises']:
             self.exercise = x['user_input']
             self.duration_min = x['duration_min']
             self.calories = x['nf_calories']
             self.workout_day = self.date_time.strftime('%d/%m/%Y')
             self.workout_time = self.date_time.strftime('%H:%M:%S')
-            # print(f'exercises = {self.exercise}')
-            # print(f'workout_date = {self.workout_day}')
-            # print(f'workout_time = {self.workout_time}')
             self.post_sheety()
 
     def get_sheety(self):
